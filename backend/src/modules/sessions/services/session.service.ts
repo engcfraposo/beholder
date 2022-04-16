@@ -16,9 +16,12 @@ const SessionService = async ({email, password}:Session) => {
     return {
       token_type: "Bearer",
       token: "some-token",
+      user: {email}
     }
   } catch (error) {
-    console.log(error);
+    return {
+      error,
+    }
   }
 }
 

@@ -15,7 +15,7 @@ const SessionController = {
         timestamp: new Date().toISOString(),
       });
     } catch (error: any) {
-      next(error);
+      console.log(error);
     }
   },
 }
