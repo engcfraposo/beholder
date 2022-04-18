@@ -1,15 +1,31 @@
-import { Route, BrowserRouter, Redirect } from 'react-router-dom';
+import { Route, Routes as Router, Navigate, Outlet } from 'react-router-dom';
 import Login from './public/Login';
 import Settings from './private/Settings';
+import { useAuth, User } from './contexts/auth';
 
-// import { Container } from './styles';
+interface ProtectRouteProps {
+  user: User | null;
+}
 
-const Routes: React.FC = () => {
+const ProtectedRoute = ({
+  user,
+}: ProtectRouteProps) => {
+  if (!user) {
+    return <Navigate to={"/"} replace />;
+  }
+
+  return <Outlet/>;
+};
+
+const Routes = () => {
+  const { user } = useAuth();
   return (
-    <BrowserRouter>
-      <Route path="/" exact component={Login} />
-      <Route path="/settings" component={Settings} />
-    </BrowserRouter>
+      <Router>
+        <Route path="/" element={<Login />}/>
+        <Route element={<ProtectedRoute user={user}/>}>
+          <Route path="/settings" element={<Settings />} />
+        </Route>
+      </Router>
   );
 }
 

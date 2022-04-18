@@ -1,13 +1,10 @@
-import React, { createContext, useCallback, useState, useContext} from 'react';
+import { createContext, useCallback, useState, useContext} from 'react';
 import { Props } from '..';
 
-import api from '../services/api';
+import api from '../../api';
 
-interface User {
+export interface User {
   id: string;
-  name: string;
-  email: string;
-  avatar_url: string;
 }
 
 interface AuthState {
@@ -24,6 +21,7 @@ interface AuthContextData {
   user: User;
   signIn(credentials: SignInCredentials): Promise<void>;
   signOut(): void;
+  error: string;
 }
 
 
@@ -31,6 +29,7 @@ interface AuthContextData {
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 export const AuthProvider = ({ children }: Props) => {
+  const [error, setError] = useState('');
   const [data, setData] = useState<AuthState>(() => {
     const token = localStorage.getItem('@Beholder:token');
     const user = localStorage.getItem('@Beholder:user');
@@ -45,22 +44,31 @@ export const AuthProvider = ({ children }: Props) => {
   });
 
   const signIn = useCallback(async ({ email, password }: SignInCredentials) => {
-    const response = await api.post('/sessions', {
-      email,
-      password,
-    });
+      setError('');
+      
+      const response = await api.post('/sessions', {
+        email,
+        password,
+      });
 
-    const { token, user } = response.data;
+      if(!response.data.data) {
+        setError('Invalid credentials');
+        return
+      }
 
-    localStorage.setItem('@Beholder:token', token);
-    localStorage.setItem('@Beholder:user', JSON.stringify(user));
+      const { token, user } = response.data.data;
 
-    api.defaults.headers.authorization = `Bearer ${token}`;
+      localStorage.setItem('@Beholder:token', token);
+      localStorage.setItem('@Beholder:user', JSON.stringify(user));
 
-    setData({ token, user });
+      api.defaults.headers.authorization = `Bearer ${token}`;
+
+      setData({ token, user });
+      setError('');
   }, []);
 
-  const signOut = useCallback(() => {
+  const signOut = useCallback(async () => {
+    await api.post('/logout');
     localStorage.removeItem('@Beholder:token');
     localStorage.removeItem('@Beholder:user');
 
@@ -69,7 +77,7 @@ export const AuthProvider = ({ children }: Props) => {
 
   return (
     <AuthContext.Provider
-      value={{ user: data.user, signIn, signOut }}
+      value={{ user: data.user, signIn, signOut, error }}
     >
       {children}
     </AuthContext.Provider>
