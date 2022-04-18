@@ -1,28 +1,50 @@
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
+import SettingsRepository from "../repositories/settings.repository";
+
 interface Session {
   email: string;
   password: string;
 }
 
-const SessionService = async ({email, password}:Session) => {
-  try {
+interface SessionResponse {
+  error?: string;
+  status: number;
+  token_type?: string;
+  token?: string;
+  user?: {id: number};
+}
+
+const SessionService = async ({email, password}:Session): Promise<SessionResponse> => {
+    const settingsRepository = new SettingsRepository();
+
     if(!email || !password) {
-      throw new Error("Invalid email or password");
+      return { error: '401 Unauthorized', status: 401 };
     }
+
+    const user = await settingsRepository.getByEmail(email)
   
-    if(email !== "engcfraposo@gmail.com" || password !== "123456") {
-      throw new Error("Invalid email or password");
+    if(!user){
+      return { error: '401 Unauthorized', status: 401 };
     }
+    const isValid = bcrypt.compareSync(password, user.password);
     
+    if(!isValid) {
+      return { error: '401 Unauthorized', status: 401 };
+    }
+
+    const token = jwt.sign(
+      {id:user.id}, 
+      process.env.JWT_SECRET as string, 
+      { expiresIn: parseInt(process.env.JWT_EXPIRES_IN as string) }
+    );
+
     return {
+      status: 201,
       token_type: "Bearer",
-      token: "some-token",
-      user: {email}
-    }
-  } catch (error) {
-    return {
-      error,
-    }
-  }
+      token,
+      user: {id: user.id}
+    };
 }
 
 export default SessionService;

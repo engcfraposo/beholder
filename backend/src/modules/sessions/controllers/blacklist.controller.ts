@@ -1,12 +1,12 @@
 import express from "express";
-import SessionService from "../services/session.service";
+import BlacklistService from "../services/blacklist.service";
 
-const SessionController = {
+const BlacklistController = {
     async create (req: express.Request, res: express.Response) {
     try {
-      const { email, password } = req.body;
+      const { authorization } = req.headers;
 
-      const data = await SessionService({ email, password });
+      const data = BlacklistService({ authorization });
 
       if(data.error) {
         return res.status(data.status).json({
@@ -27,4 +27,4 @@ const SessionController = {
   },
 }
 
-export default SessionController;
+export default BlacklistController;
