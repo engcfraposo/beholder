@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import {useFormik} from 'formik';
 import * as Yup from 'yup';
+import {memo} from 'react';
 import Logo  from '../../../img/favicon/mstile-150x150.png';
 import { useAuth } from '../../contexts/auth';
 
@@ -109,4 +110,4 @@ const Login: React.FC = () => {
   );
 }
 
-export default Login;
+export default memo(Login);

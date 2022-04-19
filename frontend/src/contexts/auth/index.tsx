@@ -1,15 +1,18 @@
-import { createContext, useCallback, useState, useContext} from 'react';
+import { createContext, useCallback, useState, useContext, useEffect} from 'react';
 import { Props } from '..';
 
 import api from '../../api';
 
 export interface User {
-  id: string;
+  email: string;
+  password: string;
+  apiUrl: string;
+  accessKey: string;
+  secretKey: string;
 }
 
 interface AuthState {
   token: string;
-  user: User;
 }
 
 interface SignInCredentials {
@@ -19,8 +22,10 @@ interface SignInCredentials {
 
 interface AuthContextData {
   user: User;
+  data: AuthState;
   signIn(credentials: SignInCredentials): Promise<void>;
   signOut(): void;
+  updateUser({values}:any): void;
   error: string;
 }
 
@@ -30,14 +35,13 @@ const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 export const AuthProvider = ({ children }: Props) => {
   const [error, setError] = useState('');
+  const [user, setUser] = useState<User>({} as User)
   const [data, setData] = useState<AuthState>(() => {
     const token = localStorage.getItem('@Beholder:token');
-    const user = localStorage.getItem('@Beholder:user');
-
-    if (token && user) {
+    if (token) {
+      // @ts-ignore
       api.defaults.headers.authorization = `Bearer ${token}`;
-
-      return { token, user: JSON.parse(user) };
+      return {token}
     }
 
     return {} as AuthState;
@@ -56,28 +60,52 @@ export const AuthProvider = ({ children }: Props) => {
         return
       }
 
-      const { token, user } = response.data.data;
+      const { token } = response.data.data;
 
       localStorage.setItem('@Beholder:token', token);
-      localStorage.setItem('@Beholder:user', JSON.stringify(user));
-
+      // @ts-ignore
       api.defaults.headers.authorization = `Bearer ${token}`;
 
-      setData({ token, user });
+      const result = await api.get('/settings');
+      console.log(result.data.data);
+
+      setData({ token });
+      setUser(result.data.data.user);
       setError('');
   }, []);
+
+  const updateUser = useCallback(async (requestUser: User) => {
+    setError('');
+    
+    const response = await api.put('/settings', requestUser);
+
+    if(!response.data.data) {
+      setError('Invalid data');
+      return
+    }
+
+    setUser(response.data.data.user);
+}, []);
 
   const signOut = useCallback(async () => {
     await api.post('/logout');
     localStorage.removeItem('@Beholder:token');
-    localStorage.removeItem('@Beholder:user');
 
     setData({} as AuthState);
   }, []);
 
+  useEffect(() => {
+    const token = localStorage.getItem('@Beholder:token');
+    if(token && !user) {
+      api.get('/settings').then(response => {
+        setUser(response.data.data.user);
+      })
+    }
+  },[user])
+
   return (
     <AuthContext.Provider
-      value={{ user: data.user, signIn, signOut, error }}
+      value={{ user, data, signIn, signOut, updateUser, error }}
     >
       {children}
     </AuthContext.Provider>
