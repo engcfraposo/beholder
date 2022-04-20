@@ -1,5 +1,6 @@
 import express from "express";
 import GetSymbolsService from "../services/get-symbols.service";
+import SyncSymbolsService from "../services/sync-symbols.service";
 import updateSymbolsService from "../services/update-symbols.service";
 
 const SymbolsController = {
@@ -63,7 +64,26 @@ const SymbolsController = {
     } catch (error: any) {
       throw new Error(error);
     }
-  }
+  },
+  async create (_req: express.Request, res: express.Response) {
+    const { id } = res.locals.user;
+    const data = await SyncSymbolsService({ id });
+
+    if(data.error) {
+      return res.status(data.status).json({
+        data: {},
+        message: data.error,
+        timestamp: new Date().toISOString(),
+      });
+    }
+
+    return res.status(200).json({
+      data,
+      message: "Success",
+      timestamp: new Date().toISOString(),
+    });
+
+  },
 }
 
 export default SymbolsController;

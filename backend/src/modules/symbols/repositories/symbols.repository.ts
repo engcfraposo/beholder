@@ -15,6 +15,12 @@ class symbolsRepository {
     update = async (symbols: Symbols) => {
         return this.symbolsRepository.save(symbols);
     }
+    deleteAll = async () => {
+        return this.symbolsRepository.delete({});
+    }
+    bulkInsert = async (symbols: Symbols[]) => {
+        return this.symbolsRepository.save(symbols);
+    }
 }
 
 export default symbolsRepository;

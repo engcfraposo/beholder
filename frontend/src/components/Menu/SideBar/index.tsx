@@ -24,7 +24,7 @@ const SideBar: React.FC = () => {
                     <li className="nav-item">
                         <Link to="/dashboard" className="nav-link d-flex align-items-center">
                             <span className="sidebar-icon">
-                                <img src="/img/favicon/favicon-32x32.png" height="32" width="32" alt="Beholder Logo" />
+                                <img src="https://beholder.azureedge.net/cdn/img/favicon/favicon-32x32.png" height="32" width="32" alt="Beholder Logo" />
                             </span>
                             <span className="mt-1 ms-1 sidebar-text">Beholder Menu</span>
                         </Link>

@@ -3,11 +3,13 @@ import React from 'react';
 import * as Yup from 'yup';
 import Menu from '../../components/Menu';
 import { useAuth } from '../../contexts/auth';
+import Symbols from './Symbols';
 
 const Settings = () => {
   const { user, updateUser } = useAuth();
   const error ="";
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
       email: user.email,
       newPassword: '',
@@ -175,7 +177,9 @@ const Settings = () => {
                   </div>
               </div>
           </div>
+          <Symbols />
       </main>
+      
   </React.Fragment>
     );
 }

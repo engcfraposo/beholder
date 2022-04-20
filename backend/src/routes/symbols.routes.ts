@@ -7,8 +7,6 @@ symbolsRoutes.get("/", SymbolsController.index);
 symbolsRoutes.get("/:symbol", SymbolsController.index);
 symbolsRoutes.patch("/:symbol", SymbolsController.update);
 
-symbolsRoutes.post("/sync", (_req, res) => {
-  res.json({ ok: true });
-})
+symbolsRoutes.post("/sync", SymbolsController.create);
 
 export default symbolsRoutes;

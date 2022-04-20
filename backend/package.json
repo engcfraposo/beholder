@@ -25,6 +25,7 @@
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",
     "mssql": "^8.1.0",
+    "node-binance-api": "^0.13.1",
     "reflect-metadata": "^0.1.13",
     "typeorm": "^0.3.6"
   },

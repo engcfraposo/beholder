@@ -2,7 +2,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import {useFormik} from 'formik';
 import * as Yup from 'yup';
 import {memo} from 'react';
-import Logo  from '../../../img/favicon/mstile-150x150.png';
 import { useAuth } from '../../contexts/auth';
 
 const Login: React.FC = () => {
@@ -41,7 +40,7 @@ const Login: React.FC = () => {
           <div className='col-12 d-flex align-items-center justify-content-center'>
             <div className='bg-white shadow border-0 rounded border-light p-4 p-lg-5 w-100 fmxw-500'>
               <div className='text-center'>
-                <img src={Logo} alt="Beholder" width={64} />
+                <img src="https://beholder.azureedge.net/cdn/img/favicon/mstile-150x150.png" alt="Beholder" width={64} />
               </div>
               <div className='text-center text-md-center mb-4 mt-md-0'>
                 <h1 className='mb-0 h3'>Sign in to our platform</h1>

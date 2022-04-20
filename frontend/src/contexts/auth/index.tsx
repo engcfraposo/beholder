@@ -95,13 +95,12 @@ export const AuthProvider = ({ children }: Props) => {
   }, []);
 
   useEffect(() => {
-    const token = localStorage.getItem('@Beholder:token');
-    if(token && !user) {
+    if(data.token) {
       api.get('/settings').then(response => {
         setUser(response.data.data.user);
       })
     }
-  },[user])
+  },[data.token])
 
   return (
     <AuthContext.Provider
