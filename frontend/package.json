@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "eslint": "eslint --ext .ts,.js,.tsx --ignore-pattern 'node_modules' --fix",
     "preview": "vite preview"
   },
   "dependencies": {
