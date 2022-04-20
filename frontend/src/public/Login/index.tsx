@@ -3,8 +3,10 @@ import {useFormik} from 'formik';
 import * as Yup from 'yup';
 import {memo} from 'react';
 import { useAuth } from '../../contexts/auth';
+import { useError } from '../../contexts/error';
 
 const Login: React.FC = () => {
+  const { errorAuth } = useError();
   const { signIn, error } = useAuth();
   const navigate = useNavigate();
   const formik = useFormik({
@@ -97,7 +99,7 @@ const Login: React.FC = () => {
                 </div> 
               </form>
               <div className="text-center mt-4 d-grid">
-                {error && <div className='alert alert-danger mt2'>{error}</div>}
+                {errorAuth && <div className='alert alert-danger mt2'>{errorAuth}</div>}
                 {formik.errors.email && formik.touched.email && <div className='alert alert-danger mt2'>{formik.errors.email}</div>}
                 {formik.errors.password && formik.touched.password && <div className='alert alert-danger mt2'>{formik.errors.password}</div>}
                 </div>

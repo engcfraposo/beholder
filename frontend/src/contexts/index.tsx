@@ -1,5 +1,6 @@
 import React from 'react';
 import { AuthProvider } from './auth';
+import { ErrorProvider } from './error';
 import { ModalProvider } from './modal';
 import { SymbolsProvider } from './symbols';
 
@@ -9,6 +10,7 @@ export type Props = {
 
 const AppProvider = ({children}: Props) => {
   return (
+    <ErrorProvider>
     <AuthProvider>
       <ModalProvider>
         <SymbolsProvider>
@@ -16,6 +18,7 @@ const AppProvider = ({children}: Props) => {
         </SymbolsProvider>
       </ModalProvider>
     </AuthProvider>
+    </ErrorProvider>
   );
 }
 

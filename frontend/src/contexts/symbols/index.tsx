@@ -82,7 +82,7 @@ export const SymbolsProvider = ({ children }: Props) => {
   } ,[data.token, isSyncing, quote]);
 
   useEffect(() => {
-    if(data.token) {
+    if(data.token && symbolModal) {
       getSymbol({symbol: symbolModal});
     }
   } ,[data.token, symbolModal]);

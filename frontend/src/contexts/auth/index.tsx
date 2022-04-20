@@ -2,6 +2,7 @@ import { createContext, useCallback, useState, useContext, useEffect} from 'reac
 import { Props } from '..';
 
 import api from '../../api';
+import { useError } from '../error';
 
 export interface User {
   email: string;
@@ -34,6 +35,7 @@ interface AuthContextData {
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 export const AuthProvider = ({ children }: Props) => {
+  const { handleErrorAuth, handleErrorSettings } = useError();
   const [error, setError] = useState('');
   const [user, setUser] = useState<User>({} as User)
   const [data, setData] = useState<AuthState>(() => {
@@ -48,39 +50,31 @@ export const AuthProvider = ({ children }: Props) => {
   });
 
   const signIn = useCallback(async ({ email, password }: SignInCredentials) => {
-      setError('');
+      handleErrorAuth('');
       
       const response = await api.post('/sessions', {
         email,
         password,
-      });
+      }).catch(err => {
+        handleErrorAuth('Invalid credentials');
+      })
 
-      if(!response.data.data) {
-        setError('Invalid credentials');
-        return
-      }
-
-      const { token } = response.data.data;
+      const { token } = response?.data.data;
 
       localStorage.setItem('@Beholder:token', token);
       // @ts-ignore
       api.defaults.headers.authorization = `Bearer ${token}`;
-
-      const result = await api.get('/settings');
-      console.log(result.data.data);
-
       setData({ token });
-      setUser(result.data.data.user);
       setError('');
   }, []);
 
   const updateUser = useCallback(async (requestUser: User) => {
-    setError('');
+    handleErrorSettings('');
     
     const response = await api.put('/settings', requestUser);
 
     if(!response.data.data) {
-      setError('Invalid data');
+      handleErrorSettings('Invalid data');
       return
     }
 
@@ -96,8 +90,11 @@ export const AuthProvider = ({ children }: Props) => {
 
   useEffect(() => {
     if(data.token) {
+      handleErrorSettings('');
       api.get('/settings').then(response => {
         setUser(response.data.data.user);
+      }).catch(err => {
+        handleErrorSettings(err.response && err.response.data.data.error);
       })
     }
   },[data.token])
