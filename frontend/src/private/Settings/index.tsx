@@ -3,11 +3,12 @@ import React from 'react';
 import * as Yup from 'yup';
 import Menu from '../../components/Menu';
 import { useAuth } from '../../contexts/auth';
+import { useError } from '../../contexts/error';
 import Symbols from './Symbols';
 
 const Settings = () => {
   const { user, updateUser } = useAuth();
-  const error ="";
+  const { errorSettings } = useError();
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -167,8 +168,8 @@ const Settings = () => {
                                       <button className="btn btn-gray-800 mt-2 animate-up-2" type="submit">Save all</button>
                                   </div>
                                   {
-                                      error
-                                          ? <div className="alert alert-danger mt-2 col-9 py-2">{error}</div>
+                                      errorSettings
+                                          ? <div className="alert alert-danger mt-2 col-9 py-2">{errorSettings}</div>
                                           : <React.Fragment></React.Fragment>
                                   }
                               </div>
