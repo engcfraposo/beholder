@@ -14,11 +14,6 @@ export interface Symbols {
   isFavorite: boolean;
 }
 
-interface UpdateSymbols {
-  newSymbols: Symbols;
-}
-
-
 interface SymbolsContextData {
   symbols: Symbols[];
   symbol: Symbols;
@@ -53,9 +48,8 @@ export const SymbolsProvider = ({ children }: Props) => {
     setSymbols(filteredSymbols);
   },[quote])
 
-  const getSymbol = useCallback(async ({symbol}:{symbol:string}) => {
-    console.log(symbol);
-    const response = await api.get(`/symbols/${symbol}`);
+  const getSymbol = useCallback(async ({symbol: requestSymbol}:{symbol:string}) => {
+    const response = await api.get(`/symbols/${requestSymbol}`);
     setSymbol(response.data.data.symbols);
   },[])
 
