@@ -22,7 +22,7 @@ cd backend
 yarn dev
 ```
 
-## Iniciando o backend ##
+## Iniciando o frontend ##
 
 ```
 cd frontend
