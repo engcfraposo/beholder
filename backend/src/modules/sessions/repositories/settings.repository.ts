@@ -9,6 +9,9 @@ class SettingsRepository {
     getByEmail = async (email: string) => {
         return this.settingsRepository.findOneBy({ email });
     }
+    update = async (settings: Settings) => {
+        return this.settingsRepository.save(settings);
+    }
 }
 
 export default SettingsRepository;

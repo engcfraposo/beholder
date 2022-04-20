@@ -1,5 +1,7 @@
 import React from 'react';
 import { AuthProvider } from './auth';
+import { ModalProvider } from './modal';
+import { SymbolsProvider } from './symbols';
 
 export type Props = {
   children?: React.ReactNode;
@@ -8,7 +10,11 @@ export type Props = {
 const AppProvider = ({children}: Props) => {
   return (
     <AuthProvider>
-      {children}
+      <ModalProvider>
+        <SymbolsProvider>
+          {children}
+        </SymbolsProvider>
+      </ModalProvider>
     </AuthProvider>
   );
 }

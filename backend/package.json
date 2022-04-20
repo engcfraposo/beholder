@@ -12,6 +12,7 @@
     "dev": "ts-node-dev -r dotenv/config --transpile-only --inspect --ignore-watch node_modules src/server.ts"
   },
   "dependencies": {
+    "@types/morgan": "^1.9.3",
     "aes-js": "^3.1.2",
     "axios": "^0.26.1",
     "bcrypt": "^5.0.1",
@@ -22,7 +23,9 @@
     "express-async-errors": "^3.1.1",
     "helmet": "^5.0.2",
     "jsonwebtoken": "^8.5.1",
+    "morgan": "^1.10.0",
     "mssql": "^8.1.0",
+    "node-binance-api": "^0.13.1",
     "reflect-metadata": "^0.1.13",
     "typeorm": "^0.3.6"
   },
