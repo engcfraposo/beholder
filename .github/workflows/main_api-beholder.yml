@@ -53,4 +53,4 @@ jobs:
           app-name: 'api-beholder'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_2CE2DA7D0D0449698E03503CDD458A78 }}
-          package: .
+          package: ./backend
