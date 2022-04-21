@@ -1,6 +1,3 @@
-import config from "./config.json";
-import bcrypt from "bcrypt";
-import crypto from "../../utils/crypto";
 import db from "..";
 import { Symbols } from "../../models/symbols.model";
 
