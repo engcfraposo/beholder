@@ -7,6 +7,8 @@ interface ErrorContextData {
   handleErrorAuth: (error: string) => void;
   errorSettings: string;
   handleErrorSettings: (error: string) => void;
+  successSettings: string;
+  handleSuccessSettings: (success: string) => void;
   errorSymbol: string;
   handleErrorSymbol: (error: string) => void;
   errorSyncSymbol: string;
@@ -18,6 +20,7 @@ const ErrorContext = createContext<ErrorContextData>({} as ErrorContextData);
 export const ErrorProvider = ({ children }: Props) => {
   const [ errorAuth, setErrorAuth ] = useState('');
   const [ errorSettings, setErrorSettings ] = useState('');
+  const [ successSettings, setSuccessSettings] = useState('');
   const [ errorSymbol, setErrorSymbol ] = useState('');
   const [ errorSyncSymbol, setErrorSyncSymbol ] = useState('');
 
@@ -27,6 +30,10 @@ export const ErrorProvider = ({ children }: Props) => {
 
   const handleErrorSettings = useCallback((error: string) => {
     setErrorSettings(error);
+  },[]);
+
+  const handleSuccessSettings = useCallback((success: string) => {
+    setSuccessSettings(success);
   },[]);
 
   const handleErrorSymbol = useCallback((error: string) => {
@@ -44,6 +51,8 @@ export const ErrorProvider = ({ children }: Props) => {
         handleErrorAuth,
         errorSettings,
         handleErrorSettings,
+        successSettings,
+        handleSuccessSettings,
         errorSymbol,
         handleErrorSymbol,
         errorSyncSymbol,

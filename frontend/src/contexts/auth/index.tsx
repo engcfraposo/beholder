@@ -35,7 +35,12 @@ interface AuthContextData {
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 export const AuthProvider = ({ children }: Props) => {
-  const { handleErrorAuth, handleErrorSettings } = useError();
+  const { 
+    handleErrorAuth, 
+    handleErrorSettings, 
+    handleSuccessSettings 
+  } = useError();
+  
   const [error, setError] = useState('');
   const [user, setUser] = useState<User>({} as User)
   const [data, setData] = useState<AuthState>(() => {
@@ -45,7 +50,6 @@ export const AuthProvider = ({ children }: Props) => {
       api.defaults.headers.authorization = `Bearer ${token}`;
       return {token}
     }
-
     return {} as AuthState;
   });
 
@@ -55,7 +59,7 @@ export const AuthProvider = ({ children }: Props) => {
       const response = await api.post('/sessions', {
         email,
         password,
-      }).catch(err => {
+      }).catch(_err => {
         handleErrorAuth('Invalid credentials');
       })
 
@@ -70,15 +74,14 @@ export const AuthProvider = ({ children }: Props) => {
 
   const updateUser = useCallback(async (requestUser: User) => {
     handleErrorSettings('');
-    
-    const response = await api.put('/settings', requestUser);
-
+    handleSuccessSettings('');
+    const response = await api.patch('/settings', requestUser);
     if(!response.data.data) {
       handleErrorSettings('Invalid data');
       return
     }
-
     setUser(response.data.data.user);
+    handleSuccessSettings('Settings updated');
 }, []);
 
   const signOut = useCallback(async () => {
@@ -91,6 +94,7 @@ export const AuthProvider = ({ children }: Props) => {
   useEffect(() => {
     if(data.token) {
       handleErrorSettings('');
+      handleSuccessSettings('');
       api.get('/settings').then(response => {
         setUser(response.data.data.user);
       }).catch(err => {
