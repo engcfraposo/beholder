@@ -8,7 +8,7 @@ import Symbols from './Symbols';
 
 const Settings = () => {
   const { user, updateUser } = useAuth();
-  const { errorSettings } = useError();
+  const { errorSettings, successSettings } = useError();
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -34,7 +34,6 @@ const Settings = () => {
       secretKey: Yup.string(),
     }),
     onSubmit: async values => {
-      console.log(values);
       updateUser({
         email: values.email?values.email:null,
         password: values.newPassword?values.newPassword:null,
@@ -170,6 +169,11 @@ const Settings = () => {
                                   {
                                       errorSettings
                                           ? <div className="alert alert-danger mt-2 col-9 py-2">{errorSettings}</div>
+                                          : <React.Fragment></React.Fragment>
+                                  }
+                                  {
+                                      successSettings
+                                          ? <div className="alert alert-success mt-2 col-9 py-2">{successSettings}</div>
                                           : <React.Fragment></React.Fragment>
                                   }
                               </div>
