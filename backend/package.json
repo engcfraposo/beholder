@@ -12,7 +12,7 @@
     "eslint": "eslint --ext .ts,.js,.tsx --ignore-pattern 'node_modules' --fix",
     "dev": "ts-node-dev -r dotenv/config --transpile-only --inspect --ignore-watch node_modules src/server.ts",
     "build": "tsc --build",
-    "start": "node -r dotenv/config dist/server.js"
+    "start": "node dist/server.js"
   },
   "dependencies": {
     "@types/morgan": "^1.9.3",
