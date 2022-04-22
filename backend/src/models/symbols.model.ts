@@ -1,7 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, Index } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, Index, BaseEntity } from "typeorm"
 
 @Entity()
-export class Symbols {
+export class Symbols extends BaseEntity {
   @PrimaryGeneratedColumn({
     type: "int",
   })

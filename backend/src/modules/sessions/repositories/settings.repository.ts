@@ -1,8 +1,12 @@
 import { Settings } from '../../../models/settings.model';
 import db from '../../../database';
+import { Repository } from 'typeorm';
 
 class SettingsRepository {
-    settingsRepository = db.manager.getRepository(Settings);
+    settingsRepository: Repository<Settings>;
+    constructor() { 
+      this.settingsRepository = db.manager.getRepository(Settings);
+    }
     getById = async (id: number) => {
         return this.settingsRepository.findOneBy({ id });
     }

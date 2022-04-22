@@ -1,8 +1,12 @@
 import { Symbols } from '../../../models/symbols.model';
 import db from '../../../database';
+import { Repository } from 'typeorm';
 
 class symbolsRepository {
-    symbolsRepository = db.manager.getRepository(Symbols);
+    symbolsRepository: Repository<Symbols>;
+    constructor() { 
+      this.symbolsRepository = db.manager.getRepository(Symbols);
+    }
     getBySymbol = async (symbol?: string) => {
       if(!symbol){
         return this.symbolsRepository.find();
