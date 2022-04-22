@@ -11,11 +11,10 @@ const db = new DataSource({
     password: process.env.DATABASE_PASSWORD,
     database: process.env.DATABASE_NAME,
     entities: [
-      path.resolve(__dirname, "**/*.model{.ts,.js}").toString(), 
+      __dirname, "**/*.model{.ts,.js}" 
     ],
     migrations: [
-      path.resolve(__dirname, "./migrations/*.ts").toString(), 
-      path.resolve(__dirname, "./migrations/*.js").toString()
+      __dirname, "./migrations/*{.ts,.js}"
     ],
     migrationsTableName: "migrations",
 })
