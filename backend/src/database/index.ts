@@ -1,8 +1,7 @@
 import "dotenv/config";
 import { DataSource } from "typeorm"
-import { Settings } from "../models/settings.model"
 import path from "path"
-import { Symbols } from "../models/symbols.model"
+
 const db = new DataSource({
     type: "mssql",
     host: process.env.DATABASE_HOST,
@@ -10,8 +9,8 @@ const db = new DataSource({
     username: process.env.DATABASE_USER,
     password: process.env.DATABASE_PASSWORD,
     database: process.env.DATABASE_NAME,
-    entities: [Settings, Symbols],
-    migrations: [path.resolve(__dirname, "./migrations/*.ts").toString()],
+    entities: [path.resolve(__dirname, "../models/*.model.ts").toString(), path.resolve(__dirname, "../models/*.model.js").toString()],
+    migrations: [path.resolve(__dirname, "./migrations/*.ts").toString(), path.resolve(__dirname, "./migrations/*.js").toString()],
     migrationsTableName: "migrations",
 })
 
