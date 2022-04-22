@@ -4,6 +4,7 @@ import path from "path"
 
 const db = new DataSource({
     type: "mssql",
+    synchronize: true,
     host: process.env.DATABASE_HOST,
     port: parseInt(process.env.DATABASE_PORT as string),
     username: process.env.DATABASE_USER,
