@@ -11,8 +11,7 @@ const db = new DataSource({
     password: process.env.DATABASE_PASSWORD,
     database: process.env.DATABASE_NAME,
     entities: [
-      path.resolve(__dirname, "../models/*.model.ts").toString(), 
-      path.resolve(__dirname, "../models/*.model.js").toString()
+      path.resolve(__dirname, "..", "models", "*.model{.ts,.js}").toString(), 
     ],
     migrations: [
       path.resolve(__dirname, "./migrations/*.ts").toString(), 
