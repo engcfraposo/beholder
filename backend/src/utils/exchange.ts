@@ -1,7 +1,6 @@
 import Binance from "node-binance-api";
-import { Settings } from "../models/settings.model";
 
-const exchange = (settings: Settings) => {
+const exchange = (settings: any) => {
   if(!settings){
     throw new Error('Settings not found');
   }

@@ -1,21 +1,29 @@
-import { Settings } from '../../../models/settings.model';
-import db from '../../../database';
-import { Repository } from 'typeorm';
-
-class SettingsRepository {
-    settingsRepository: Repository<Settings>;
-    constructor() { 
-      this.settingsRepository = db.manager.getRepository(Settings);
-    }
-    getById = async (id: number) => {
-        return this.settingsRepository.findOneBy({ id });
-    }
-    getByEmail = async (email: string) => {
-        return this.settingsRepository.findOneBy({ email });
-    }
-    update = async (settings: Settings) => {
-        return this.settingsRepository.save(settings);
-    }
+import Settings  from '../../../models/settings.model';
+interface NewSettings{
+  email: string;
+  password: string;
+  apiUrl: string;
+  accessKey: string;
+  secretKey: string;
 }
 
-export default SettingsRepository;
+const getById = async (id: number) => {
+  const { dataValues }: any = await Settings.findOne({ where: {id} });
+  return dataValues;
+}
+
+const getByEmail = async (email: string) => {
+  const { dataValues }: any = await Settings.findOne({ where: {email} });
+  return dataValues 
+}
+
+const update = async (id: number, newSettings: NewSettings) => {
+  const { dataValues }: any = await Settings.update(newSettings, { where: {id} });
+  return dataValues;
+}
+
+export default{
+    getById,
+    getByEmail,
+    update
+}

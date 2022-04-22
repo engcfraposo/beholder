@@ -2,7 +2,7 @@ import "reflect-metadata";
 import db from './database';
 import app from './app';
 
-db.initialize()
+db.authenticate()
 .then(() => {
   console.log('🚀 Database connected on Azure SQL');
 })

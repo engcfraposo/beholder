@@ -1,7 +1,6 @@
-import { Settings } from "../../../models/settings.model";
 import bcrypt from "bcrypt";
 import crypto from "../../../utils/crypto";
-import SettingsRepository from "../repositories/settings.repository";
+import settingsRepository from "../repositories/settings.repository";
 
 interface UpdateSettings {
   email: string;
@@ -14,11 +13,10 @@ interface UpdateSettings {
 interface SettingsResponse {
   error?: string;
   status: number;
-  user?: Settings;
+  user?: any;
 }
 
 const UpdateSettingsService =  async (settings:UpdateSettings, id:number): Promise<SettingsResponse> => {
-  const settingsRepository = new SettingsRepository();
   const user = await settingsRepository.getById(id);
   if(!user){
     return { error: '401 Unauthorized', status: 401 };
@@ -50,7 +48,13 @@ const UpdateSettingsService =  async (settings:UpdateSettings, id:number): Promi
     user.secretKey = crypto.encrypt(settings.secretKey);
   }
 
-  const newUser = await settingsRepository.update(user);
+  const newUser = await settingsRepository.update(id, {
+    email: user.email,
+    password: user.password,
+    apiUrl: user.apiUrl,
+    accessKey: user.accessKey,
+    secretKey: user.secretKey,
+  });
 
   if(!newUser){
     return { error: '500 Internal Server Error', status: 500 };

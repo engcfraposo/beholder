@@ -5,10 +5,12 @@
   "license": "MIT",
   "scripts": {
     "typeorm": "ts-node-dev ./node_modules/.bin/typeorm-ts-node-esm",
-    "migration:generate": "yarn typeorm migration:generate -d src/database/index.ts",
-    "migration:run": "yarn typeorm migration:run -d src/database/index.ts",
-    "migration:revert": "yarn typeorm migration:revert -d src/database/index.ts",
-    "seeds:run": "ts-node-dev src/database/seeds/index.ts",
+    "migration:generate": "yarn sequelize-cli migration:generate --name",
+    "migration:run": "yarn sequelize-cli db:migrate",
+    "migration:revert": "yarn sequelize-cli db:migrate:undo",
+    "seed:generate": "yarn sequelize-cli seed:generate --name",
+    "seed:run": "yarn sequelize-cli db:seed:all",
+    "seed:revert": "yarn sequelize-cli db:seed:undo",
     "eslint": "eslint --ext .ts,.js,.tsx --ignore-pattern 'node_modules' --fix",
     "dev": "ts-node-dev -r dotenv/config --transpile-only --inspect --ignore-watch node_modules src/server.ts",
     "build": "tsc --build",
@@ -30,7 +32,9 @@
     "mssql": "^8.1.0",
     "node-binance-api": "^0.13.1",
     "reflect-metadata": "^0.1.13",
-    "typeorm": "^0.3.6"
+    "sequelize": "^6.19.0",
+    "sequelize-cli": "^6.4.1",
+    "tedious": "^14.4.0"
   },
   "devDependencies": {
     "@types/aes-js": "^3.1.1",

@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import SettingsRepository from "../repositories/settings.repository";
+import settingsRepository from "../repositories/settings.repository";
 
 interface Session {
   email: string;
@@ -16,14 +16,12 @@ interface SessionResponse {
 }
 
 const SessionService = async ({email, password}:Session): Promise<SessionResponse> => {
-    const settingsRepository = new SettingsRepository();
-
     if(!email || !password) {
       return { error: '401 Unauthorized', status: 401 };
     }
 
     const user = await settingsRepository.getByEmail(email)
-  
+ 
     if(!user){
       return { error: '401 Unauthorized', status: 401 };
     }

@@ -1,35 +1,31 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, Index, BaseEntity } from "typeorm"
+import * as Sequelize from 'sequelize';
+import db from '../database';
 
-@Entity()
-export class Settings extends BaseEntity {
-  @PrimaryGeneratedColumn({
-    type: "int",
-  })
-  id!: number
+const Settings = db.define('settings', {
+  id: {
+    type: Sequelize.INTEGER,
+    autoIncrement: true,
+    allowNull: false,
+    primaryKey: true,
+  },
+  email: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+  password: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+  apiUrl: Sequelize.STRING,
+  accessKey: Sequelize.STRING,
+  secretKey: Sequelize.STRING,
+  createdAt: Sequelize.DATE,
+  updatedAt: Sequelize.DATE,
+}, {
+  indexes: [{
+    fields: ['email'],
+    unique: true,
+  }]
+})
 
-  @Column({
-    nullable: false,
-  })
-  @Index({ unique: true })
-  email!: string
-
-  @Column({
-    nullable: false,
-  })
-  password!: string
-
-  @Column()
-  apiUrl!: string
-
-  @Column()
-  accessKey!: string
-
-  @Column()
-  secretKey!: string
-
-  @CreateDateColumn()
-  createdAt!: Date
-
-  @UpdateDateColumn()
-  updatedAt!: Date
-}
+export default Settings;

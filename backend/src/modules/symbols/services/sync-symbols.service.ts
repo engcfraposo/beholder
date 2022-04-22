@@ -1,18 +1,15 @@
-import { Symbols } from "../../../models/symbols.model";
-import SettingsRepository from "../../sessions/repositories/settings.repository";
-import SymbolsRepository from "../repositories/symbols.repository";
+import settingsRepository from "../../sessions/repositories/settings.repository";
+import symbolsRepository from "../repositories/symbols.repository";
 import exchange from "../../../utils/exchange";
 import crypto from "../../../utils/crypto";
 
 interface SyncSymbolsResponse {
   error?: string;
   status: number;
-  symbols?: Symbols | Symbols[];
+  symbols?: any;
 }
 
 const SyncSymbolsService =  async ({id}:{id:number}): Promise<SyncSymbolsResponse> => {
-  const symbolsRepository = new SymbolsRepository();
-  const settingsRepository = new SettingsRepository();
   const settings = await settingsRepository.getById(id);
   if(!settings){
     return { error: '401 Unauthorized', status: 401 };

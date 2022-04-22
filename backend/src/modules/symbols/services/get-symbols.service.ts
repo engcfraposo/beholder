@@ -1,14 +1,12 @@
-import { Symbols } from "../../../models/symbols.model";
-import SymbolsRepository from "../repositories/symbols.repository";
+import symbolsRepository from "../repositories/symbols.repository";
 
 interface GetSymbolsResponse {
   error?: string;
   status: number;
-  symbols?: Symbols | Symbols[];
+  symbols?: any;
 }
 
 const GetSymbolsService =  async ({symbol}:{symbol?:string}): Promise<GetSymbolsResponse> => {
-  const symbolsRepository = new SymbolsRepository();
   const symbols = await symbolsRepository.getBySymbol(symbol);
 
   if(!symbols){

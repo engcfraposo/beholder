@@ -1,30 +1,34 @@
-import { Symbols } from '../../../models/symbols.model';
-import db from '../../../database';
-import { Repository } from 'typeorm';
+import Symbols  from '../../../models/symbol.model';
 
-class symbolsRepository {
-    symbolsRepository: Repository<Symbols>;
-    constructor() { 
-      this.symbolsRepository = db.manager.getRepository(Symbols);
-    }
-    getBySymbol = async (symbol?: string) => {
-      if(!symbol){
-        return this.symbolsRepository.find();
-      }
-        return this.symbolsRepository.findOneBy({ symbol });
-    }
-    getById = async (id: number) => {
-        return this.symbolsRepository.findOneBy({id});
-    }
-    update = async (symbols: Symbols) => {
-        return this.symbolsRepository.save(symbols);
-    }
-    deleteAll = async () => {
-        return this.symbolsRepository.delete({});
-    }
-    bulkInsert = async (symbols: Symbols[]) => {
-        return this.symbolsRepository.save(symbols);
-    }
+
+interface NewSymbol {
+    symbol: string;
+    basePrecision: number;
+    quotePrecision: number;
+    minNotional: string;
+    minLotSize: string;
+    isFavorite: boolean;
+}
+const getBySymbol = async (symbol?: string) => {
+  if(!symbol){
+    return Symbols.findAll();
+  }
+    const { dataValues }: any = await Symbols.findOne({ where: {symbol} });
+    return dataValues;
+}
+const update = async (symbols: NewSymbol) => {
+    return Symbols.update(symbols, { where: {symbol: symbols.symbol} });
+}
+const deleteAll = async () => {
+    return Symbols.destroy({ truncate: true });
+}
+const bulkInsert = async (symbols: NewSymbol[]) => {
+    return Symbols.bulkCreate(symbols as any);
 }
 
-export default symbolsRepository;
+export default {
+    getBySymbol,
+    update,
+    deleteAll,
+    bulkInsert
+};

@@ -1,5 +1,4 @@
-import { Symbols } from "../../../models/symbols.model";
-import SymbolsRepository from "../repositories/symbols.repository";
+import symbolsRepository from "../repositories/symbols.repository";
 
 interface UpdateSymbolsRequest {
   symbol: string;
@@ -13,12 +12,11 @@ interface UpdateSymbolsRequest {
 interface UpdateSymbolsResponse {
   error?: string;
   status: number;
-  symbols?: Symbols;
+  symbols?: any;
 }
 
 const UpdateSymbolsService =  async (symbols:UpdateSymbolsRequest): Promise<UpdateSymbolsResponse> => {
-  const symbolsRepository = new SymbolsRepository();
-  const hasSymbol = await symbolsRepository.getBySymbol(symbols.symbol) as Symbols;
+  const hasSymbol = await symbolsRepository.getBySymbol(symbols.symbol);
   if(!hasSymbol){
     return { error: '401 Unauthorized', status: 401 };
   }
