@@ -2,7 +2,7 @@ import { Settings } from '../../../models/settings.model';
 import db from '../../../database';
 
 class SettingsRepository {
-    settingsRepository = db.getRepository(Settings);
+    settingsRepository = db.manager.getRepository(Settings);
     getById = async (id: number) => {
         return this.settingsRepository.findOneBy({ id });
     }

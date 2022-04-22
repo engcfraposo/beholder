@@ -2,7 +2,7 @@ import { Symbols } from '../../../models/symbols.model';
 import db from '../../../database';
 
 class symbolsRepository {
-    symbolsRepository = db.getRepository(Symbols);
+    symbolsRepository = db.manager.getRepository(Symbols);
     getBySymbol = async (symbol?: string) => {
       if(!symbol){
         return this.symbolsRepository.find();

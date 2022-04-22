@@ -9,8 +9,14 @@ const db = new DataSource({
     username: process.env.DATABASE_USER,
     password: process.env.DATABASE_PASSWORD,
     database: process.env.DATABASE_NAME,
-    entities: [path.resolve(__dirname, "../models/*.model.ts").toString(), path.resolve(__dirname, "../models/*.model.js").toString()],
-    migrations: [path.resolve(__dirname, "./migrations/*.ts").toString(), path.resolve(__dirname, "./migrations/*.js").toString()],
+    entities: [
+      path.resolve(__dirname, "../models/*.model.ts").toString(), 
+      path.resolve(__dirname, "../models/*.model.js").toString()
+    ],
+    migrations: [
+      path.resolve(__dirname, "./migrations/*.ts").toString(), 
+      path.resolve(__dirname, "./migrations/*.js").toString()
+    ],
     migrationsTableName: "migrations",
 })
 
