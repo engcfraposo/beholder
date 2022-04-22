@@ -1,7 +1,8 @@
 import "dotenv/config";
 import aes from 'aes-js';
 
-const key = aes.utils.utf8.toBytes(process.env.AES_KEY as string);
+const aesKey = process.env.AES_KEY? process.env.AES_KEY : "TextMustBe32BytesLongandExactter";
+const key = aes.utils.utf8.toBytes(aesKey);
 
 if(key.length !== 32) {
   throw new Error('Invalid key size for AES. Must be 256-bit / 32 bytes.');
