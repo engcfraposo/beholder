@@ -56,7 +56,8 @@ jobs:
           package: ./backend
   clean-artifacts:
     runs-on: ubuntu-latest
-    needs: deploy      
+    needs: deploy
+          
       - name: Remove old artifacts
         uses: c-hive/gha-remove-artifacts@v1
         with:
