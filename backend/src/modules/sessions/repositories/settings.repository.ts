@@ -12,6 +12,11 @@ const getById = async (id: number) => {
   return dataValues;
 }
 
+const getDefaultSettings = async () => {
+  const { dataValues }: any = await Settings.findOne();
+  return dataValues;
+}
+
 const getByEmail = async (email: string) => {
   const { dataValues }: any = await Settings.findOne({ where: {email} });
   return dataValues 
@@ -24,6 +29,7 @@ const update = async (id: number, newSettings: NewSettings) => {
 
 export default{
     getById,
+    getDefaultSettings,
     getByEmail,
     update
 }

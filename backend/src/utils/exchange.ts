@@ -16,8 +16,13 @@ const exchange = (settings: any) => {
   const exchangeInfo = async () =>{
     return binance.exchangeInfo();
   }
+
+  const miniTickerStream = async (callback: (markets: any) => void) => {
+    binance.websockets.miniTicker(markets => callback(markets));
+  }
   return {
     exchangeInfo,
+    miniTickerStream,
   }
 }
 
