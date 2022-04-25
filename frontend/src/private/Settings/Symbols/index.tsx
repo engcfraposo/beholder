@@ -10,10 +10,11 @@ const Symbols: React.FC = () => {
   const error = '';
   
   const { 
-    symbols,
+    symbolsSettings,
     isSyncing, 
     syncSymbols, 
-    changeQuote 
+    changeQuoteSymbols, 
+    quoteSymbols,
   } = useSymbols()
 
   const { handleOpenModal } = useModal()
@@ -30,7 +31,7 @@ const Symbols: React.FC = () => {
                                         <h2 className="fs-5 fw-bold mb-0">Symbols</h2>
                                     </div>
                                     <div className="col">
-                                        <SelectQuote onChange={changeQuote} />
+                                        <SelectQuote quote={quoteSymbols} onChange={changeQuoteSymbols} />
                                     </div>
                                 </div>
                             </div>
@@ -47,7 +48,7 @@ const Symbols: React.FC = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {symbols.map(item => <SymbolRow key={item.symbol} symbols={item} onClick={() => handleOpenModal(item.symbol)} />)}
+                                        {symbolsSettings.map(item => <SymbolRow key={item.symbol} symbols={item} onClick={() => handleOpenModal(item.symbol)} />)}
                                     </tbody>
                                 </table>
                                 {/*<Pagination count={count} /> */}

@@ -1,0 +1,15 @@
+.tableFixHead{
+  overflow: auto;
+  height: 100px;
+}
+
+.tableFixHead thead th {
+  position: sticky;
+  top: 0;
+  background-color: #f8f8f8;
+}
+
+.divScroll {
+  overflow: auto;
+  max-height: 300px;
+}

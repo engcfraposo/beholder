@@ -15,38 +15,56 @@ export interface Symbols {
 }
 
 interface SymbolsContextData {
-  symbols: Symbols[];
+  symbolsSettings: Symbols[];
+  symbolsMiniTicker: Symbols[];
   symbol: Symbols;
-  quote: string;
+  quoteSymbols: string;
+  quoteMiniTicker: string;
   isSyncing: boolean;
   syncSymbols: () => void;
   getSymbol({symbol}:{symbol:string}): void;
-  getSymbols(): void;
+  getSymbolsSettings(): void;
+  getSymbolsMiniTicker(): void;
   updateSymbol(newSymbols:Symbols): void;
-  changeQuote(e: React.ChangeEvent<HTMLSelectElement>): void;
+  changeQuoteSymbols(e: React.ChangeEvent<HTMLSelectElement>): void;
+  changeQuoteMiniTicker(e: React.ChangeEvent<HTMLSelectElement>): void;
 }
 
 const SymbolsContext = createContext<SymbolsContextData>({} as SymbolsContextData);
 
 export const SymbolsProvider = ({ children }: Props) => {
   const { symbolModal } = useModal();
-  const [ symbols, setSymbols ] = useState<Symbols[]>([]);
+  const [ symbolsSettings, setSymbolsSettings ] = useState<Symbols[]>([]);
+  const [ symbolsMiniTicker, setSymbolsMiniTicker ] = useState<Symbols[]>([]);
   const [ symbol, setSymbol ] = useState<Symbols>({} as Symbols);
-  const [quote, setQuote] = useState<string>("USD");
+  const [quoteSymbols, setQuoteSymbols] = useState<string>("USD");
+  const [quoteMiniTicker, setQuoteMiniTicker] = useState<string>("USD")
   const [ isSyncing, setIsSyncing ] = useState(false);
   const { data } = useAuth();
 
-  const getSymbols = useCallback(async () => {
+  const getSymbolsMiniTicker = useCallback(async () => {
     const response = await api.get('/symbols');
     const originalSymbols = response.data.data.symbols as Symbols[];
     const filteredSymbols = originalSymbols.filter(s => {
-      if (quote === 'FAVORITES'){
+      if (quoteMiniTicker === 'FAVORITES'){
           return s.isFavorite === true;
       }
-      return s.symbol.endsWith(quote);
+      return s.symbol.endsWith(quoteMiniTicker);
     });
-    setSymbols(filteredSymbols);
-  },[quote])
+    setSymbolsMiniTicker(filteredSymbols);
+  },[quoteMiniTicker])
+
+  const getSymbolsSettings = useCallback(async () => {
+    const response = await api.get('/symbols');
+    const originalSymbols = response.data.data.symbols as Symbols[];
+    const filteredSymbols = originalSymbols.filter(s => {
+      if (quoteSymbols === 'FAVORITES'){
+          return s.isFavorite === true;
+      }
+      return s.symbol.endsWith(quoteSymbols);
+    });
+    setSymbolsSettings(filteredSymbols);
+  },[quoteSymbols])
 
   const getSymbol = useCallback(async ({symbol: requestSymbol}:{symbol:string}) => {
     const response = await api.get(`/symbols/${requestSymbol}`);
@@ -66,20 +84,29 @@ export const SymbolsProvider = ({ children }: Props) => {
   const syncSymbols = useCallback(async () => {
     setIsSyncing(true);
     const response = await api.post('/symbols/sync');
-    setSymbols(response.data.data.symbols);
+    setSymbolsSettings(response.data.data.symbols);
     setIsSyncing(false);
   },[])
 
-  const changeQuote = useCallback(async (e: React.ChangeEvent<HTMLSelectElement>) => {
-    console.log(e.target.value);
-    setQuote(e.target.value);
+  const changeQuoteSymbols = useCallback(async (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setQuoteSymbols(e.target.value);
+  },[])
+
+  const changeQuoteMiniTicker = useCallback(async (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setQuoteMiniTicker(e.target.value);
   },[])
 
   useEffect(() => {
     if(data.token) {
-      getSymbols();
+      getSymbolsSettings();
     }
-  } ,[data.token, isSyncing, quote]);
+  } ,[data.token, isSyncing, quoteSymbols]);
+
+  useEffect(() => {
+    if(data.token) {
+      getSymbolsMiniTicker();
+    }
+  } ,[data.token, quoteMiniTicker]);
 
   useEffect(() => {
     if(data.token && symbolModal) {
@@ -89,15 +116,19 @@ export const SymbolsProvider = ({ children }: Props) => {
   return (
     <SymbolsContext.Provider
       value={{ 
-        quote,
-        symbols,
+        quoteSymbols,
+        quoteMiniTicker,
+        symbolsSettings,
+        symbolsMiniTicker,
         symbol,
         isSyncing,
         syncSymbols,
         getSymbol,
-        getSymbols,
+        getSymbolsSettings,
+        getSymbolsMiniTicker,
         updateSymbol,
-        changeQuote,
+        changeQuoteSymbols,
+        changeQuoteMiniTicker
       }}
     >
       {children}

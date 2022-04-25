@@ -7,7 +7,7 @@ const SymbolModal = () => {
   const error = '';
   const closeButton = useRef<HTMLButtonElement>(null);
   const { handleCloseModal }=useModal();
-  const { symbol: data, updateSymbol, getSymbols } = useSymbols();
+  const { symbol: data, updateSymbol, getSymbolsSettings } = useSymbols();
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -20,7 +20,7 @@ const SymbolModal = () => {
       },
       onSubmit: async values => {
         await updateSymbol(values);
-        await getSymbols();
+        await getSymbolsSettings();
         closeButton.current?.click();
       }
   });

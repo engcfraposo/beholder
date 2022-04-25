@@ -1,6 +1,7 @@
 import { Route, Routes as Router, Navigate, Outlet } from 'react-router-dom';
 import Login from './public/Login';
 import Settings from './private/Settings';
+import Dashboard from './private/Dashboard';
 import { useAuth, User } from './contexts/auth';
 
 interface ProtectRouteProps {
@@ -24,6 +25,7 @@ const Routes = () => {
         <Route path="/" element={<Login />}/>
         <Route element={<ProtectedRoute user={user}/>}>
           <Route path="/settings" element={<Settings />} />
+          <Route path="/dashboard" element={<Dashboard />} />
         </Route>
       </Router>
   );

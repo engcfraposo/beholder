@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import { useSymbols } from '../../contexts/symbols';
 
 interface SelectQuoteProps {
-  onChange: any;
+  onChange: (e: ChangeEvent<HTMLSelectElement>) => void;
+  quote: string;
 }
 
 const quotes = ["BNB", "BRL", "BTC", "GBP", "ETH", "EUR", "USD", "USDT"] 
 
-const SelectQuote = ({onChange}:SelectQuoteProps) => {
-  const { quote } = useSymbols();
+const SelectQuote = ({onChange, quote}:SelectQuoteProps) => {
   return (
   <React.Fragment>
   {/*@ts-ignore*/}
