@@ -45,10 +45,7 @@ const MiniTicker= ({data}:MiniTickerProps) => {
                                 symbolsMiniTicker && symbolsMiniTicker.length
                                 ? symbolsMiniTicker.map(item => {
                                   return(
-                                  <React.Fragment key={item.symbol}>
-                                    {/*@ts-ignore*/}
-                                      <TickerRow symbol={item.symbol} data={data[item.symbol]} />
-                                  </React.Fragment>
+                                      <TickerRow key={item.symbol} symbol={item.symbol} data={data[item.symbol]} />
                                 )})
                                 : <React.Fragment></React.Fragment>
                             }

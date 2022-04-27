@@ -1,11 +1,14 @@
 import React from 'react';
 import Menu from '../../components/Menu';
+import BookTicker from './BookTicker';
+import CandleChart from './CandleChart';
 import useDashboard from './hooks';
 import MiniTicker from './MiniTicker';
-
+import Wallet from './Wallet';
 
 const Dashboard: React.FC = () => {
-  const { tickerState } = useDashboard();
+  
+  const { tickerState, bookState } = useDashboard();
   return (
     <React.Fragment>
       <Menu />
@@ -23,14 +26,15 @@ const Dashboard: React.FC = () => {
             </div>
           </div>
         </div>
-        
+        <CandleChart />
         <div className="row">
           <div className="col-12">
             <MiniTicker data={tickerState} />
           </div>
         </div>
         <div className="row">
-
+          <BookTicker data={bookState} />
+          <Wallet />
         </div>
       </main>
 

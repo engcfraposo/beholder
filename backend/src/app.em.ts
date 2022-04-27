@@ -11,15 +11,39 @@ export default (settings: any, wss: WebSocket.Server) => {
   }
 
   settings.secretKey = crypto.decrypt(settings.secretKey);
-  const { miniTickerStream } = exchange(settings);
+  const { miniTickerStream, bookStream, userDataStream } = exchange(settings);
 
-  miniTickerStream(markets => {
-    wss.clients.forEach((client: WebSocket.WebSocket) => {
-      if (client.readyState === WebSocket.OPEN) {
-        client.send(JSON.stringify({miniTicker:markets}));
-      }
+  function broadcast(jsonObject: { miniTicker?: any; book?: any[]; }) {
+    if (!wss || !wss.clients) return;
+    wss.clients.forEach(client => {
+        if (client.readyState === WebSocket.OPEN) {
+            client.send(JSON.stringify(jsonObject));
+        }
     });
-  })
+}
+
+miniTickerStream(markets => {
+    broadcast({ miniTicker: markets });
+})
+
+let book: any[]  = [];
+bookStream(order => {
+    if (book.length === 200) {
+        broadcast({ book })
+        book = [];
+    } else book.push({...order});
+})
+
+userDataStream(
+    //@ts-ignore
+    (balanceData: any) => broadcast({ balance: balanceData }),
+    //@ts-ignore
+    (executionData: any) => broadcast({ execution: executionData }),
+    //@ts-ignore
+    (listStatusData: any) => broadcast({ listStatus: listStatusData }),
+    
+)
+
 
   console.log("🚀 Exchange Monitor server started");
 }

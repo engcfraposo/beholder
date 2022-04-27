@@ -47,7 +47,6 @@ const SymbolsController = {
         minNotional,
         isFavorite
       });
-
       if(data.error) {
         return res.status(data.status).json({
           data: {},
@@ -55,7 +54,6 @@ const SymbolsController = {
           timestamp: new Date().toISOString(),
         });
       }
-
       return res.status(200).json({
         data,
         message: "Success",
@@ -66,7 +64,8 @@ const SymbolsController = {
     }
   },
   async create (_req: express.Request, res: express.Response) {
-    const { id } = res.locals.user;
+    try {
+      const { id } = res.locals.user;
     const data = await SyncSymbolsService({ id });
 
     if(data.error) {
@@ -76,13 +75,14 @@ const SymbolsController = {
         timestamp: new Date().toISOString(),
       });
     }
-
     return res.status(200).json({
       data,
       message: "Success",
       timestamp: new Date().toISOString(),
     });
-
+    } catch (error: any) {
+      throw new Error(error);
+    }
   },
 }
 

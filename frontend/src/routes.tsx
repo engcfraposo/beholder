@@ -25,6 +25,8 @@ const Routes = () => {
         <Route path="/" element={<Login />}/>
         <Route element={<ProtectedRoute user={user}/>}>
           <Route path="/settings" element={<Settings />} />
+        </Route>
+        <Route element={<ProtectedRoute user={user}/>}>
           <Route path="/dashboard" element={<Dashboard />} />
         </Route>
       </Router>

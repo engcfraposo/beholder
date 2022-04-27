@@ -17,6 +17,7 @@ const Settings = db.define('settings', {
     allowNull: false,
   },
   apiUrl: Sequelize.STRING,
+  streamUrl: Sequelize.STRING,
   accessKey: Sequelize.STRING,
   secretKey: Sequelize.STRING,
   createdAt: Sequelize.DATE,
