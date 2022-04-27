@@ -21,6 +21,7 @@ const SettingsController = {
         user:{
           email: data.user?.email,
           apiUrl: data.user?.apiUrl,
+          streamUrl: data.user?.streamUrl,
           accessKey: data.user?.accessKey,
           secretKey: data.user?.secretKey,
         }
@@ -34,10 +35,11 @@ const SettingsController = {
   },
   async update (req: express.Request, res: express.Response) {
     const { id } = res.locals.user;
-    const { email, password, apiUrl, accessKey, secretKey } = req.body;
+    const { email, password, apiUrl, streamUrl, accessKey, secretKey } = req.body;
+    console.log(req.body);
     try{
       const data = await UpdateSettingsService({
-        email, password, apiUrl, accessKey, secretKey,
+        email, password, apiUrl, streamUrl, accessKey, secretKey,
       }, id);
 
       if(data.error) {
@@ -53,6 +55,7 @@ const SettingsController = {
           user:{
             email: data.user?.email,
             apiUrl: data.user?.apiUrl,
+            streamUrl: data.user?.streamUrl,
             accessKey: data.user?.accessKey,
             secretKey: data.user?.secretKey,
           }

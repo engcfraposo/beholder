@@ -8,6 +8,7 @@ export interface User {
   email: string;
   password: string;
   apiUrl: string;
+  streamUrl: string;
   accessKey: string;
   secretKey: string;
 }
@@ -29,8 +30,6 @@ interface AuthContextData {
   updateUser({values}:any): void;
   error: string;
 }
-
-
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 

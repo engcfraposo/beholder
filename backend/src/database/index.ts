@@ -9,7 +9,7 @@ const db = new Sequelize(
     dialect: "mssql",
     host: process.env.DATABASE_HOST as string,
     port: parseInt(process.env.DATABASE_PORT as string),
-    logging: true,
+    logging: console.log,
     pool: {
       max: 5,
       min: 0,

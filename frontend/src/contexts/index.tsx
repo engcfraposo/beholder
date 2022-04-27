@@ -1,5 +1,6 @@
 import React from 'react';
 import { AuthProvider } from './auth';
+import { BalancesProvider } from './balances';
 import { ErrorProvider } from './error';
 import { ModalProvider } from './modal';
 import { SymbolsProvider } from './symbols';
@@ -14,7 +15,9 @@ const AppProvider = ({children}: Props) => {
     <AuthProvider>
       <ModalProvider>
         <SymbolsProvider>
-          {children}
+          <BalancesProvider>
+            {children}
+          </BalancesProvider>
         </SymbolsProvider>
       </ModalProvider>
     </AuthProvider>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 interface SideBarItemProps {
   to: string;
@@ -8,9 +8,10 @@ interface SideBarItemProps {
   children?: React.ReactNode;
 }
 const SideBarItem = ({to, text, onClick, children}:SideBarItemProps) => {
+  const location = useLocation();
   function getClassName(itemName: string) {
-    return window.location.pathname === itemName ? 'nav-item active' : 'nav-item';
-}
+    return location.pathname === itemName ? 'nav-item active' : 'nav-item';
+  }
   return (
     <li className={getClassName(to)}>
     <Link to={to} className="nav-link" onClick={onClick}>

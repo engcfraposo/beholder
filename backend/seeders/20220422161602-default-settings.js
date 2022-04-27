@@ -10,6 +10,7 @@ module.exports = {
         email: process.env.EMAIL,
         password: bcrypt.hashSync(process.env.PASSWORD, 10),
         apiUrl: process.env.API_URL,
+        streamUrl: process.env.STREAM_URL,
         accessKey: process.env.ACCESS_KEY,
         secretKey: crypto.encrypt(process.env.SECRET_KEY),
         createdAt: new Date(),

@@ -14,6 +14,7 @@ const SyncSymbolsService =  async ({id}:{id:number}): Promise<SyncSymbolsRespons
   if(!settings){
     return { error: '401 Unauthorized', status: 401 };
   }
+  //@ts-ignore
   settings.secretKey = crypto.decrypt(settings.secretKey);
   const { exchangeInfo } = exchange(settings);
   if(!exchangeInfo){

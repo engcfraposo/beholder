@@ -17,8 +17,8 @@ function encrypt(text: string) {
 
 function decrypt(encryptedHex: string) {
   const encryptedBytes = aes.utils.hex.toBytes(encryptedHex);
-  const aesCTR = new aes.ModeOfOperation.ctr(key);
-  const decryptedBytes = aesCTR.decrypt(encryptedBytes);
+  const aesCtr = new aes.ModeOfOperation.ctr(key);
+  const decryptedBytes = aesCtr.decrypt(encryptedBytes);
   return aes.utils.utf8.fromBytes(decryptedBytes);
 }
 

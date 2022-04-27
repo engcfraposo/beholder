@@ -17,17 +17,21 @@ export interface Symbols {
 interface SymbolsContextData {
   symbolsSettings: Symbols[];
   symbolsMiniTicker: Symbols[];
+  symbolsBook: Symbols[];
   symbol: Symbols;
   quoteSymbols: string;
   quoteMiniTicker: string;
+  quoteBook: string;
   isSyncing: boolean;
   syncSymbols: () => void;
   getSymbol({symbol}:{symbol:string}): void;
   getSymbolsSettings(): void;
   getSymbolsMiniTicker(): void;
+  getSymbolsBook(): void;
   updateSymbol(newSymbols:Symbols): void;
   changeQuoteSymbols(e: React.ChangeEvent<HTMLSelectElement>): void;
   changeQuoteMiniTicker(e: React.ChangeEvent<HTMLSelectElement>): void;
+  changeQuoteBook(e: React.ChangeEvent<HTMLSelectElement>): void;
 }
 
 const SymbolsContext = createContext<SymbolsContextData>({} as SymbolsContextData);
@@ -36,9 +40,11 @@ export const SymbolsProvider = ({ children }: Props) => {
   const { symbolModal } = useModal();
   const [ symbolsSettings, setSymbolsSettings ] = useState<Symbols[]>([]);
   const [ symbolsMiniTicker, setSymbolsMiniTicker ] = useState<Symbols[]>([]);
+  const [ symbolsBook, setSymbolsBook ] = useState<Symbols[]>([]);
   const [ symbol, setSymbol ] = useState<Symbols>({} as Symbols);
   const [quoteSymbols, setQuoteSymbols] = useState<string>("USD");
   const [quoteMiniTicker, setQuoteMiniTicker] = useState<string>("USD")
+  const [quoteBook, setQuoteBook] = useState<string>("USD")
   const [ isSyncing, setIsSyncing ] = useState(false);
   const { data } = useAuth();
 
@@ -53,6 +59,18 @@ export const SymbolsProvider = ({ children }: Props) => {
     });
     setSymbolsMiniTicker(filteredSymbols);
   },[quoteMiniTicker])
+
+  const getSymbolsBook = useCallback(async () => {
+    const response = await api.get('/symbols');
+    const originalSymbols = response.data.data.symbols as Symbols[];
+    const filteredSymbols = originalSymbols.filter(s => {
+      if (quoteBook === 'FAVORITES'){
+          return s.isFavorite === true;
+      }
+      return s.symbol.endsWith(quoteBook);
+    });
+    setSymbolsBook(filteredSymbols);
+  },[quoteBook])
 
   const getSymbolsSettings = useCallback(async () => {
     const response = await api.get('/symbols');
@@ -96,6 +114,10 @@ export const SymbolsProvider = ({ children }: Props) => {
     setQuoteMiniTicker(e.target.value);
   },[])
 
+  const changeQuoteBook = useCallback(async (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setQuoteBook(e.target.value);
+  },[])
+
   useEffect(() => {
     if(data.token) {
       getSymbolsSettings();
@@ -109,6 +131,12 @@ export const SymbolsProvider = ({ children }: Props) => {
   } ,[data.token, quoteMiniTicker]);
 
   useEffect(() => {
+    if(data.token) {
+      getSymbolsBook();
+    }
+  } ,[data.token, quoteBook]);
+
+  useEffect(() => {
     if(data.token && symbolModal) {
       getSymbol({symbol: symbolModal});
     }
@@ -118,17 +146,21 @@ export const SymbolsProvider = ({ children }: Props) => {
       value={{ 
         quoteSymbols,
         quoteMiniTicker,
+        quoteBook,
         symbolsSettings,
         symbolsMiniTicker,
+        symbolsBook,
         symbol,
         isSyncing,
         syncSymbols,
         getSymbol,
         getSymbolsSettings,
         getSymbolsMiniTicker,
+        getSymbolsBook,
         updateSymbol,
         changeQuoteSymbols,
-        changeQuoteMiniTicker
+        changeQuoteMiniTicker,
+        changeQuoteBook
       }}
     >
       {children}

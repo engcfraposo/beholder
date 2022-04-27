@@ -16,7 +16,7 @@ const Settings = () => {
       newPassword: '',
       confirmPassword: '',
       apiUrl: user.apiUrl,
-      streamUrl: '',
+      streamUrl: user.streamUrl,
       accessKey: user.accessKey,
       secretKey: '',
     },
@@ -30,16 +30,18 @@ const Settings = () => {
         .oneOf([Yup.ref('newPassword'), null], 'Passwords must match'),
       apiUrl: Yup.string()
         .url('Invalid url'),
+      streamUrl: Yup.string(),
       accessKey: Yup.string(),
       secretKey: Yup.string(),
     }),
     onSubmit: async values => {
       updateUser({
-        email: values.email?values.email:null,
-        password: values.newPassword?values.newPassword:null,
-        apiUrl: values.apiUrl?values.apiUrl:null,
-        accessKey: values.accessKey?values.accessKey:null,
-        secretKey: values.secretKey?values.secretKey:null,
+        email: values.email,
+        password: values.newPassword,
+        apiUrl: values.apiUrl,
+        streamUrl: values.streamUrl,
+        accessKey: values.accessKey,
+        secretKey: values.secretKey,
       });
     }
   });
